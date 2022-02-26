@@ -29,8 +29,23 @@ io.on('connection', socket => {
       console.log("user "+userId+ " joined room "+roomId)
       socket.join(roomId)
       socket.broadcast.to(roomId).emit('user-connected', userId);
+
+
+      socket.on("sendMessage",(data)=>{
+        // here we gonna emit event to  the front to evrey one in the room
+        
+        socket.to(data.room).emit("reciveMessage",data)
+       
+     })
+
+      socket.on('disconnect', () => {
+        socket.broadcast.to(roomId).emit('user-disconnected', userId)
+      })
    
     })
+
+
+
   })
   
 
